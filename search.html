@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background-color: white;
+      color: black;
+      font-family: Arial, sans-serif;
+    }
+
+    #searchForm {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    #searchTerm {
+      padding: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+    }
+
+    #searchButton {
+      padding: 8px 16px;
+      background-color: #009688;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #database {
+      margin-top: 10px;
+      padding: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      text-align: left;
+      border: 1px solid black;
+    }
+
+    th {
+      background-color: teal;
+      color: white;
+    }
+
+    #goHomeButton {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 8px 16px;
+      background-color: #009688;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .pie-slice {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200px;
+      height: 200px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      clip-path: polygon(50% 50%, 100% 50%, 100% 0, 50% 0);
+    }
+
+    .pie-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: black;
+      font-size: 12px;
+    }
+
+    #chart {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+    }
+  </style>
+  <script>
+    var employeeData = []; // Array to store the CSV data
+
+    function searchDatabase() {
+      var searchTerm = document.getElementById("searchTerm").value;
+
+      // Filter the employee data based on the search term
+      var filteredData = employeeData.filter(row => {
+        for (var i = 0; i < row.length; i++) {
+          if (row[i].toLowerCase().includes(searchTerm.toLowerCase())) {
+            return true;
+          }
+        }
+        return false;
+      });
+
+      // Set the content of the database div with the filtered results
+      var databaseDiv = document.getElementById("database");
+      databaseDiv.innerHTML = createTable(filteredData);
+
+      // Group employees by managerId and update the chart
+      var managerData = groupByManager(filteredData);
+      updateChart(managerData);
+    }
+
+    function createTable(data) {
+      var table = "<table>";
+
+      // Create table header
+      table += "<tr>";
+      table += "<th>EMPLOYEE_ID</th>";
+      table += "<th>FIRST_NAME</th>";
+      table += "<th>LAST_NAME</th>";
+      table += "<th>EMAIL</th>";
+      table += "<th>PHONE_NUMBER</th>";
+      table += "<th>HIRE_DATE</th>";
+      table += "<th>JOB_ID</th>";
+      table += "<th>SALARY</th>";
+      table += "<th>TECHNOLOGY</th>";
+      table += "<th>MANAGER_ID</th>";
+      table += "<th>DEPARTMENT_ID</th>";
+      table += "</tr>";
+
+      // Create table rows and columns
+      for (var i = 0; i < data.length; i++) {
+        table += "<tr>";
+        for (var j = 0; j < data[i].length; j++) {
+          table += "<td>" + data[i][j] + "</td>";
+        }
+        table += "</tr>";
+      }
+
+      table += "</table>";
+      return table;
+    }
+
+    function parseCSV(csv) {
+      var rows = csv.split("\n");
+      var data = [];
+
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i].trim();
+
+        // Skip empty lines
+        if (row === "") {
+          continue;
+        }
+
+        data.push(row.split(","));
+      }
+
+      return data;
+    }
+
+    function groupByManager(data) {
+      var managerData = {};
+
+      for (var i = 0; i < data.length; i++) {
+        var employee = data[i];
+        var managerId = employee[9];
+
+        if (managerId in managerData) {
+          managerData[managerId].count++;
+        } else {
+          managerData[managerId] = {
+            count: 1,
+            managerId: managerId
+          };
+        }
+      }
+
+      return Object.values(managerData);
+    }
+
+
+
+    function updateChart(data) {
+  var chartContainer = document.getElementById('chart');
+  chartContainer.innerHTML = '';
+
+  var total = 0;
+  for (var i = 0; i < data.length; i++) {
+    total += data[i].count;
+  }
+
+  var angle = 0;
+  for (var i = 0; i < data.length; i++) {
+    var percentage = (data[i].count / total) * 100;
+    var slice = document.createElement('div');
+    slice.className = 'pie-slice';
+    slice.style.backgroundColor = getRandomColor();
+    slice.style.transform = 'rotate(' + angle + 'deg)';
+    slice.style.clipPath = 'polygon(50% 50%, 100% 50%, 100% 0, 50% 0)';
+    chartContainer.appendChild(slice);
+
+    var label = document.createElement('div');
+    label.className = 'pie-label';
+    label.textContent = 'Manager ' + data[i].managerId;
+    slice.appendChild(label);
+
+    angle += percentage;
+  }
+}
+
+    function getRandomColor() {
+      var letters = '0123456789ABCDEF';
+      var color = '#';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+
+    window.addEventListener('DOMContentLoaded', function () {
+      // Fetch the CSV file with a cache-busting parameter
+      fetch('employee.csv?' + new Date().getTime())
+        .then(response => response.text())
+        .then(data => {
+          // Parse the CSV data
+          employeeData = parseCSV(data);
+        })
+        .catch(error => console.log(error));
+
+      var searchForm = document.getElementById("searchForm");
+      searchForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        searchDatabase();
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <form id="searchForm">
+    <input type="text" id="searchTerm" placeholder="Enter search term" />
+    <button id="searchButton" type="submit">Search</button>
+    <button id="goHomeButton" onclick="window.location.href='homehtml'">Go Home</button>
+  </form>
+  <div id="database"></div>
+  <div id="chart"></div>
+</body>
+
+</html>

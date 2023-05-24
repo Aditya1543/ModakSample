@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+  background-color: #fff;
+  color: #000;
+  font-family: Arial, sans-serif;
+}
+
+form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #009688;
+  border-radius: 5px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #009688;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #009688;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+button:last-child {
+  margin-right: 0;
+}
+
+button:hover {
+  background-color: #008077;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:active {
+  background-color: #006a6c;
+}
+
+button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.5);
+}
+
+    
+  </style>
+  
+</head>
+<body>
+  <form id="addEmployeeForm" action="addemployee.php" method="POST">
+    <label for="employeeId">Employee ID:</label>
+    <input type="text" id="employeeId" name="employeeId" required>
+    
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" required>
+    
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" required>
+    
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+    
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="tel" id="phoneNumber" name="phoneNumber" required>
+    
+    <label for="hireDate">Hire Date:</label>
+    <input type="date" id="hireDate" name="hireDate" required>
+    
+    <label for="jobId">Job ID:</label>
+    <input type="text" id="jobId" name="jobId" required>
+
+    <label for="Salary">Salary :</label>
+    <input type="text" id="salary" name="salary" required>
+
+    <label for="technology">Technology:</label>
+    <input type="text" id="technology" name="technology" required>
+
+    <label for="managerId">Manager ID:</label>
+    <input type="text" id="managerId" name="managerId" required>
+    
+    <label for="departmentId">Department ID:</label>
+    <input type="text" id="departmentId" name="departmentId" required>
+
+    
+    
+    
+    <button type="submit">Add Employee</button>
+  </form>
+
+  <button onclick="location.href='home.html'">Go Back to Home</button>
+  <button onclick="location.href='search.html'">Search</button>
+</body>
+</html>

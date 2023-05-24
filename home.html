@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <script>
+    var employeeData = []; 
+    
+    function showDatabase() {
+      var databaseDiv = document.getElementById("database");
+      var showBtn = document.getElementById("showBtn");
+      var hideBtn = document.getElementById("hideBtn");
+      var linksDiv = document.getElementById("links");
+      
+      fetch('employee.csv?' + new Date().getTime())
+        .then(response => response.text())
+        .then(data => {
+          employeeData = parseCSV(data);
+          
+          databaseDiv.innerHTML = createTable(employeeData);
+        })
+        .catch(error => console.log(error));
+      
+      databaseDiv.style.display = "block";
+      showBtn.style.display = "none";
+      
+      hideBtn.style.display = "inline-block";
+      linksDiv.style.display = "block";
+    }
+    
+    function hideDatabase() {
+      var databaseDiv = document.getElementById("database");
+      var showBtn = document.getElementById("showBtn");
+      var hideBtn = document.getElementById("hideBtn");
+      var linksDiv = document.getElementById("links");
+      
+      databaseDiv.style.display = "none";
+      showBtn.style.display = "inline-block";
+      
+      hideBtn.style.display = "none";
+      linksDiv.style.display = "block";
+    }
+    
+    function createTable(data) {
+      var table = "<table>";
+      
+      table += "<tr>";
+      table += "<th>EMPLOYEE_ID</th>";
+      table += "<th>FIRST_NAME</th>";
+      table += "<th>LAST_NAME</th>";
+      table += "<th>EMAIL</th>";
+      table += "<th>PHONE_NUMBER</th>";
+      table += "<th>HIRE_DATE</th>";
+      table += "<th>JOB_ID</th>";
+      table += "<th>SALARY</th>";
+      table += "<th>TECHNOLOGY</th>";
+      table += "<th>MANAGER_ID</th>";
+      table += "<th>DEPARTMENT_ID</th>";
+      
+      table += "</tr>";
+      
+      for (var i = 0; i < data.length; i++) {
+        table += "<tr>";
+        table += "<td>" + data[i][0] + "</td>";
+        table += "<td>" + data[i][1] + "</td>";
+        table += "<td>" + data[i][2] + "</td>";
+        table += "<td>" + data[i][3] + "</td>";
+        table += "<td>" + data[i][4] + "</td>";
+        table += "<td>" + data[i][5] + "</td>";
+        table += "<td>" + data[i][6] + "</td>";
+        table += "<td>" + data[i][7] + "</td>";
+        table += "<td>" + data[i][8] + "</td>";
+        table += "<td>" + data[i][9] + "</td>";
+        table += "<td>" + data[i][10] + "</td>";
+        table += "</tr>";
+      }
+      
+      table += "</table>";
+      return table;
+    }
+    
+    function parseCSV(csv) {
+      var rows = csv.split("\n");
+      var data = [];
+      
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i].trim();
+        
+        if (row === "") {
+          continue;
+        }
+        
+        data.push(row.split(","));
+      }
+      
+      return data;
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <img class="logo" src="logo.png" alt="Company Logo">
+    <h1>Employee Database</h1>
+    
+    <button id="showBtn" onclick="showDatabase()">Show Table</button>
+    <button id="hideBtn" onclick="hideDatabase()">Hide Table</button>
+    
+    <div id="links">
+      <button onclick="location.href='search.html'">Search</button>
+      <button onclick="location.href='addemployee.html'">Add Employee</button>
+      <button onclick="location.href='graph.html'">Graphs</button>
+    </div>
+    
+    <div id="database"></div>
+  </div>
+</body>
+</html>

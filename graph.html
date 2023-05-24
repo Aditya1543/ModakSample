@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Graphs</title>
+  <style>
+    #container {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 20px;
+    }
+
+    .bar-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 20px;
+    }
+    
+    .bar {
+      width: 40px;
+      margin-bottom: 10px;
+      background-color: teal;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+    
+    .bar-label {
+      font-size: 12px;
+      margin-top: 5px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Technology Graph</h1>
+  <div id="container"></div>
+  <button id="goHomeButton" onclick="location.href='home.html'">Go Back to Home</button>
+
+
+  <script>
+    function fetchData() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', 'employee.csv', true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var csvData = xhr.responseText;
+          var lines = csvData.split('\n');
+          var technologies = [];
+          var counts = [];
+
+          for (var i = 1; i < lines.length; i++) {
+            var line = lines[i].split(',');
+            var technology = line[8]; // Assuming technology is in the 9th column (index 8) of the CSV
+            var index = technologies.indexOf(technology);
+
+            if (index === -1) {
+              technologies.push(technology);
+              counts.push(1);
+            } else {
+              counts[index]++;
+            }
+          }
+
+          updateChart(technologies, counts);
+        }
+      };
+      xhr.send();
+    }
+
+    function updateChart(technologies, counts) {
+      var chartContainer = document.getElementById('container');
+      chartContainer.innerHTML = '';
+
+      for (var i = 0; i < technologies.length; i++) {
+        var barContainer = document.createElement('div');
+        barContainer.className = 'bar-container';
+
+        var bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.height = counts[i] * 20 + 'px';
+        bar.textContent = counts[i];
+
+        var label = document.createElement('div');
+        label.className = 'bar-label';
+        label.textContent = technologies[i];
+        
+        barContainer.appendChild(bar);
+        barContainer.appendChild(label);
+        chartContainer.appendChild(barContainer);
+      }
+    }
+
+    // Fetch data and update the chart initially
+    fetchData();
+
+    // Polling mechanism to update the chart periodically
+    setInterval(fetchData, 5000); // Refresh the data every 5 seconds (adjust as needed)
+  </script>
+</body>
+</html>

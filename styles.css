@@ -1,0 +1,89 @@
+body {
+    background-color: #f1f1f1;
+  }
+  
+  .container {
+    max-width: auto;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 120px;
+    height: 75px;
+  }
+  
+  h1 {
+    text-align: center;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    color: #009688;
+  }
+  
+  #showBtn,
+  #hideBtn,
+  #links {
+    margin-bottom: 10px;
+  }
+  
+  #showBtn,
+  #hideBtn {
+    padding: 8px 16px;
+    background-color: #009688;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  #hideBtn {
+    display: none;
+  }
+  
+  #links {
+    text-align: center;
+    display: none;
+  }
+  
+  #links button {
+    margin-right: 10px;
+    padding: 8px 16px;
+    background-color: #009688;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  #database {
+    display: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th,
+  td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #009688;
+    color: #fff;
+  }
+  
